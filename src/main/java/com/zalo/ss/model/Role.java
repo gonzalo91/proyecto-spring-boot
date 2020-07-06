@@ -3,8 +3,9 @@ import javax.persistence.*;
 
 @Entity
 public class Role {
-    public static final Long USER = (long) 1;
-    public static final Long ADMIN = (long) 2;
+    public static final Long ADMIN = (long) 1;    
+    public static final Long STUDENT = (long) 2;
+    public static final Long TEACHER = (long) 3;
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)

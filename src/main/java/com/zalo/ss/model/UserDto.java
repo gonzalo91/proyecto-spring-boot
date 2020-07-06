@@ -1,18 +1,40 @@
 package com.zalo.ss.model;
 
-public class UserDto {
+import java.io.Serializable;
 
+public class UserDto implements Serializable {
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
     private String username;
+    private String name;
     private String password;
-    private int age;
-    private int salary;
+    private int status;
 
     public String getUsername() {
         return username;
     }
 
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPassword() {
@@ -23,19 +45,7 @@ public class UserDto {
         this.password = password;
     }
 
-    public int getAge() {
-        return age;
-    }
 
-    public void setAge(int age) {
-        this.age = age;
-    }
 
-    public int getSalary() {
-        return salary;
-    }
-
-    public void setSalary(int salary) {
-        this.salary = salary;
-    }
+    
 }

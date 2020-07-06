@@ -1,9 +1,7 @@
 package com.zalo.ss.service.impl;
 
 import com.zalo.ss.service.UserService;
-import com.zalo.ss.dao.RoleDao;
 import com.zalo.ss.dao.UserDao;
-import com.zalo.ss.model.Role;
 import com.zalo.ss.model.User;
 import com.zalo.ss.model.UserDto;
 
@@ -23,9 +21,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	
 	@Autowired
 	private UserDao userDao;
-	
-	@Autowired
-	private RoleDao roleDao;
+		
 
 	@Autowired
 	private BCryptPasswordEncoder bcryptEncoder;
@@ -73,15 +69,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	@Override
     public User save(UserDto user) {
 		User newUser = new User();			
-		Set<Role> roles = new HashSet<Role>();
 		
-		//Optional<Role> role = roleDao.findById(Role.USER);
+		newUser.setUsername(user.getUsername());		
+		newUser.setPassword(bcryptEncoder.encode(user.getPassword()));		
+		newUser.setName(user.getName());
+		newUser.setStatus(user.getStatus());
 		
-		//roles.add(role.get());
-		
-		//newUser.setRoles(roles);
-	    newUser.setUsername(user.getUsername());
-	    newUser.setPassword(bcryptEncoder.encode(user.getPassword()));		
         return userDao.save(newUser);
     }
 }

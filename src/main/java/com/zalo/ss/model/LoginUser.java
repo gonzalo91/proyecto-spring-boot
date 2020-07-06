@@ -1,5 +1,4 @@
 package com.zalo.ss.model;
-
 public class LoginUser {
 
     private String username;
