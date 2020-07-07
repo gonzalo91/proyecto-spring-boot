@@ -7,17 +7,17 @@ public class TeacherDto extends UserDto {
      */
     private static final long serialVersionUID = 1L;
     private String n_employee;
-    private int type;
+    private Long type;
 
     public String getN_employee() {
         return n_employee;
     }
 
-    public int getType() {
+    public Long getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(Long type) {
         this.type = type;
     }
 

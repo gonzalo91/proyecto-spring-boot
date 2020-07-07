@@ -67,15 +67,13 @@ public class StudentController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @RequestMapping(value="/update/{id}", method=RequestMethod.GET)
+    @RequestMapping(value="/update/{id}", method=RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public List<Student> update(
+    public Student update(
         @PathVariable Long id,
         @RequestBody final Student student
-    ){                       
-        studentService.update(id, student);
-        System.out.println(student.getUser());
-        return null;
+    ){                                       
+        return studentService.update(id, student);
     }
 
 

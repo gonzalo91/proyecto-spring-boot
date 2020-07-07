@@ -70,8 +70,8 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Student findById(Long id) {
-        Optional<Student> student = studentDao.findById(id);
+    public Student findById(Long id) {        
+        Optional<Student> student = studentDao.findById(id);        
         return student.get();
     }
 

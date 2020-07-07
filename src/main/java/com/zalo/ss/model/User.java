@@ -41,6 +41,10 @@ public class User {
     @JsonIgnore
     private Student student;
 
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval=true)
+    @JsonIgnore
+    private Teacher teacher;
+
     @Column
     private Integer status;
 
@@ -54,6 +58,14 @@ public class User {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Teacher getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
     }
 
     public void setId(Long id) {
