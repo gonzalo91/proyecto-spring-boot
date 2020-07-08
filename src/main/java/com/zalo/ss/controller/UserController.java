@@ -38,6 +38,12 @@ public class UserController {
         return userService.save(user);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'STUDENT', 'TEACHER')")
+    @RequestMapping(value = "/users/current", method = RequestMethod.GET)
+    public User getLogIn(){
+        return userService.getCurrent();
+    }
+
 
 
 }

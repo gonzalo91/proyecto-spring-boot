@@ -25,7 +25,9 @@ public class Teacher {
     @Column
     private String n_employee;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)    
+    
+    //@OneToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval=false)    
+    @ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.ALL)    
     private Type type;
 
     public Teacher(){

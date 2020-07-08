@@ -2,6 +2,7 @@ package com.zalo.ss.service;
 
 import java.util.List;
 
+import com.zalo.ss.model.InscriptionDto;
 import com.zalo.ss.model.Student;
 import com.zalo.ss.model.StudentDto;
 
@@ -19,4 +20,11 @@ public interface StudentService {
     Student findById(Long id);
 
     List<Student> findByFilters(String name, String username, String number, Integer status);
+
+    public Integer subscribeGroup(Long group);
+
+    public void unsubscribeGroup(Long group);
+
+    public InscriptionDto inscription();
+    
 }

@@ -2,6 +2,8 @@ package com.zalo.ss.controller;
 
 import java.util.List;
 
+import com.zalo.ss.model.Group;
+import com.zalo.ss.model.InscriptionDto;
 import com.zalo.ss.model.Student;
 import com.zalo.ss.model.StudentDto;
 import com.zalo.ss.service.StudentService;
@@ -28,10 +30,8 @@ public class StudentController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value="/create", method=RequestMethod.POST)
-    public Student create(@RequestBody final StudentDto student) {
-        System.out.println(student.getStatus());
-        return studentService.save(student);
-        
+    public Student create(@RequestBody final StudentDto student) {        
+        return studentService.save(student);        
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -76,6 +76,31 @@ public class StudentController {
         return studentService.update(id, student);
     }
 
+    @PreAuthorize("hasRole('STUDENT')")
+    @RequestMapping(value="/subscribe_group", method=RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK)
+    public Integer subscribe_group(  
+        @RequestBody Group group          
+    ){                                       
+        return studentService.subscribeGroup(group.getId());
+    }
+
+    @PreAuthorize("hasRole('STUDENT')")
+    @RequestMapping(value="/unsubscribe_group", method=RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK)
+    public void unsubscribe_group(  
+        @RequestBody Group group          
+    ){                                       
+        studentService.unsubscribeGroup(group.getId());
+    }
+
+    @PreAuthorize("hasRole('STUDENT')")
+    @RequestMapping(value="/inscription", method=RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public InscriptionDto inscription(                 
+    ){                                       
+        return studentService.inscription();
+    }
 
 
 }

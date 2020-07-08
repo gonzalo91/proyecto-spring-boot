@@ -2,7 +2,6 @@ package com.zalo.ss.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-
 import javax.persistence.*;
 import java.util.Set;
 
@@ -11,7 +10,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    //@GeneratedValue
+    // @GeneratedValue
     private Long id;
 
     @Column(nullable = false)
@@ -29,27 +28,34 @@ public class User {
             @JoinColumn(name = "ROLE_ID") })
     private Set<Role> roles;
 
-    
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    
     @JoinTable(name = "USER_GROUP", joinColumns = { @JoinColumn(name = "USER_ID") }, inverseJoinColumns = {
             @JoinColumn(name = "GROUP_ID") })
-    private Set<Group> groups;    
+    private Set<Group> groups;
 
-    
-    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval=true)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private Student student;
 
-    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval=true)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private Teacher teacher;
 
     @Column
     private Integer status;
 
+    private String new_password;
+
     public Long getId() {
         return id;
+    }
+
+    public String getNew_password() {
+        return new_password;
+    }
+
+    public void setNew_password(String new_password) {
+        this.new_password = new_password;
     }
 
     public Integer getStatus() {
@@ -105,6 +111,14 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public Set<Group> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(Set<Group> groups) {
+        this.groups = groups;
     }
 
     public void setStudent(Student student){        

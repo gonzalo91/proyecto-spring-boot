@@ -23,6 +23,9 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 @Service(value = "teacherService")
 public class TeacherServiceImpl implements TeacherService {
     @Autowired    
@@ -39,6 +42,9 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+	private BCryptPasswordEncoder bcryptEncoder;
 
     @Override
     public Teacher save(TeacherDto teacherDto){
@@ -68,10 +74,11 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public void delete(long id) {
-        Optional<User> user = userDao.findById(id);
-        user.get().setRoles(null);
-        user.get().setTeacher(null);
-        userDao.save(user.get());                   
+        User user = userDao.findById(id).get();
+        user.setRoles(null);
+        user.getTeacher().setType(null);
+        user.setTeacher(null);
+        userDao.save(user);                   
     }
 
     @Override
@@ -82,20 +89,26 @@ public class TeacherServiceImpl implements TeacherService {
         teacher.setN_employee(teacherModel.getN_employee());
         teacher.getUser().setName(teacherModel.getUser().getName());
         teacher.getUser().setUsername(teacherModel.getUser().getUsername());
-        teacher.getUser().setStatus(teacherModel.getUser().getStatus());
+        teacher.getUser().setStatus(teacherModel.getUser().getStatus());        
         teacher.setType(type);
+              
+        if(teacherModel.getUser().getNew_password() != ""){                                 
+            teacher.getUser().setPassword(bcryptEncoder.encode(teacherModel.getUser().getNew_password()));
+        }
 
         return teacherDao.save(teacher);        
     }
 
     @Override
-    public List<Teacher> findByFilters(String name, String username, Long type, Integer status) {
+    public List<Teacher> findByFilters(String name, String username, String n_employee, Long type, Integer status) {
         Teacher teacher = new Teacher();
         
         teacher.getUser().setName(name);
         teacher.getUser().setUsername(username);
         teacher.getUser().setStatus(status);
         teacher.getType().setId(type);
+
+        teacher.setN_employee(n_employee);
         
         ExampleMatcher matcher = ExampleMatcher.matching()
                                 .withIgnoreNullValues().withIgnoreCase();        

@@ -51,9 +51,9 @@ public class TeacherController {
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value="/delete/{id}", method=RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
-    public String delete(@PathVariable(value = "id") final Long id){   
+    public void delete(@PathVariable(value = "id") final Long id){   
         teacherService.delete(id);
-        return "ok";
+        
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -62,10 +62,11 @@ public class TeacherController {
     public List<Teacher> search(
         @RequestParam(value = "name" , required = false) String name,
         @RequestParam(value = "username" , required = false)  String username,
+        @RequestParam(value = "n_employee" , required = false)  String n_employee,
         @RequestParam(value = "type" , required = false)  Long type,
         @RequestParam(value = "status" , required = false)  Integer status
     ){                            
-        return teacherService.findByFilters(name, username, type, status);
+        return teacherService.findByFilters(name, username, n_employee , type, status);
     }
 
     @PreAuthorize("hasRole('ADMIN')")

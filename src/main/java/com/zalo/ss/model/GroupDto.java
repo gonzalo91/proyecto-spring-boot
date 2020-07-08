@@ -1,15 +1,12 @@
 package com.zalo.ss.model;
 
+import lombok.Data;
+
+@Data
 public class GroupDto {
-    private int subject_id;
+    private Long subject;
 
-    private int status;
+    private Long status;
 
-    public int getSubject_id() {
-        return subject_id;
-    }
-
-    public void setSubject_id(int subject_id) {
-        this.subject_id = subject_id;
-    }
+    private int students_qty;    
 }

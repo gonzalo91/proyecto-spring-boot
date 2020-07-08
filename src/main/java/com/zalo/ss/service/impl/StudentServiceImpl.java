@@ -5,13 +5,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Consumer;
 
+import com.zalo.ss.dao.GroupDao;
 import com.zalo.ss.dao.RoleDao;
 import com.zalo.ss.dao.StudentDao;
 import com.zalo.ss.dao.UserDao;
 import com.zalo.ss.model.Student;
 import com.zalo.ss.model.StudentDto;
 import com.zalo.ss.model.User;
+import com.zalo.ss.model.Group;
+import com.zalo.ss.model.InscriptionDto;
 import com.zalo.ss.model.Role;
 import com.zalo.ss.service.StudentService;
 import com.zalo.ss.service.UserService;
@@ -19,6 +23,9 @@ import com.zalo.ss.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service(value = "studentService")
@@ -34,7 +41,10 @@ public class StudentServiceImpl implements StudentService {
     private RoleDao roleDao;
 
     @Autowired
-    UserService userService;
+    private GroupDao groupDao;
+
+    @Autowired
+    UserService userService;    
 
     @Override
     public Student save(StudentDto studentDto) {
@@ -95,7 +105,73 @@ public class StudentServiceImpl implements StudentService {
 
         return studentDao.save(student2);
     }
+
+    public Integer subscribeGroup(Long group){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username;
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails)principal).getUsername();            
+        } else {
+            username = principal.toString();
+        }
+
+        User user = userDao.findByUsername(username);
+        user.getGroups().size();
+        Set<Group> groups = user.getGroups();
+        Group groupM = groupDao.findById(group).get();
+        
+        if( groupM.getStudents_qty().intValue()  - ( groupM.getUsers().size() + 1)  < 0){            
+            return 0;            
+        }
+                        
+        groups.add(groupM);
+        user.setGroups(groups);                    
+        userDao.save(user);
+        
+        return 1;
+    }
+
+    public void unsubscribeGroup(Long group){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username;
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails)principal).getUsername();            
+        } else {
+            username = principal.toString();
+        }
+
+        User user = userDao.findByUsername(username);
+        user.getGroups().size();
+        
+        Set<Group> groups = user.getGroups();
+        Group groupM = groupDao.findById(group).get();
+        groups.remove(groupM);
+        user.setGroups(groups);    
+                
+        userDao.save(user);
+    }
     
 
+    public InscriptionDto inscription(){
+        User user =userService.getCurrent();
 
+        System.out.println(user.getId());
+        Set<Long> ids = new HashSet<Long>();
+        Set<Group> subscribe_groups = user.getGroups();
+
+        subscribe_groups.forEach((Group group) -> {
+            ids.add(group.getSubject().getId());
+        });
+        ids.add(1000L);
+
+        List<Group> available_groups = groupDao.findBySubjectIdNotIn(ids);
+
+        InscriptionDto iDto = new InscriptionDto();
+
+        iDto.setAvailable_groups(available_groups);
+        iDto.setSubscribe_groups(subscribe_groups);
+        
+        
+        return iDto;        
+    }
 }

@@ -7,5 +7,5 @@ import com.zalo.ss.model.TeacherDto;
 
 public interface TeacherService extends GeneralCrud<Teacher, TeacherDto>{
             
-    List<Teacher> findByFilters(String name, String username, Long type, Integer status);
+    List<Teacher> findByFilters(String name, String username, String n_employee, Long type, Integer status);
 }

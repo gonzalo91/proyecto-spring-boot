@@ -7,6 +7,7 @@ import com.zalo.ss.model.UserDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -77,4 +78,19 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		
         return userDao.save(newUser);
     }
+
+	@Override
+	public User getCurrent() {
+
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username;
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails)principal).getUsername();            
+        } else {
+            username = principal.toString();
+		}
+		
+		User user = userDao.findByUsername(username);
+		return user;
+	}
 }
